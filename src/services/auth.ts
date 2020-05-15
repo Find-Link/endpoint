@@ -1,20 +1,42 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStatic } from 'passport';
+import { Request } from 'express';
+import { AuthenticationError } from 'apollo-server';
+import User, { UserModel } from '../models/User';
 
-import User from '../models/User';
 import { secret } from '../config';
+
+function authenticate(_target: Function, _propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+  const original = descriptor.value;
+  if (typeof original === 'function') {
+    descriptor.value = function (...args: any): any {
+      const [_parent, _arguments, context] = args;
+      const { user } = context;
+
+      if (user) {
+        const result = original.apply(this, args);
+        return result;
+      }
+
+      throw new AuthenticationError('You must be logged in');
+    };
+  }
+  return descriptor;
+}
 
 export default (passport: PassportStatic): void => {
   passport.use(new Strategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secret,
-  }, (jwtPayload, done) => {
-    User.findById(jwtPayload._id, (err, user) => {
+    passReqToCallback: true,
+  }, (req: Request, payload: UserModel, done: (err: Error | null, user: any) => void) => {
+    User.findById(payload._id, (err, user) => {
       if (err) {
         return done(err, false);
       }
 
       if (user) {
+        req.user = user;
         return done(null, user);
       }
 
@@ -22,3 +44,5 @@ export default (passport: PassportStatic): void => {
     });
   }));
 };
+
+export { authenticate };

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { Comment } from '../controllers/comment';
 
-interface Comment extends Document {
-  content: string;
+export interface CommentModel extends Document, Omit<Comment, 'user' | 'post'> {
   user: Schema.Types.ObjectId;
   post: Schema.Types.ObjectId;
 }
@@ -23,15 +23,15 @@ const commentSchema = new Schema<Comment>({
   },
 });
 
-commentSchema.post('save', (doc: Comment) => {
+commentSchema.post('save', (doc: CommentModel) => {
   const User = mongoose.model('User');
   User.findByIdAndUpdate(doc.user, { $push: { comment: doc._id } }).exec();
 });
 
-commentSchema.post('remove', (doc: Comment) => {
+commentSchema.post('remove', (doc: CommentModel) => {
   const User = mongoose.model('User');
   User.findByIdAndUpdate(doc.user, { $pull: { comment: doc._id } }).exec();
 });
 
-const comment = mongoose.model<Comment>('Comment', commentSchema);
+const comment = mongoose.model<CommentModel>('Comment', commentSchema);
 export default comment;

@@ -1,15 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import Comment from './Comment';
+import { Post } from '../controllers/post';
 
-interface Post extends Document {
-  title: string;
-  description: string;
-  sources: string[];
-  tags: string[];
+export interface PostModel extends Document, Omit<Post, 'comments'> {
   comments: Schema.Types.ObjectId[];
 }
 
-const postSchema = new Schema<Post>({
+const postSchema = new Schema<PostModel>({
   title: {
     type: String,
     required: true,
@@ -32,9 +28,10 @@ const postSchema = new Schema<Post>({
   }],
 });
 
-postSchema.post('remove', (doc: Post) => {
+postSchema.post('remove', (doc: PostModel) => {
+  const Comment = mongoose.model('Comment');
   Comment.remove({ _id: { $in: doc.comments } }).exec();
 });
 
-const post = mongoose.model<Post>('Post', postSchema);
+const post = mongoose.model<PostModel>('Post', postSchema);
 export default post;
