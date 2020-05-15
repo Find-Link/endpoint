@@ -2,7 +2,8 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStatic } from 'passport';
 import { Request } from 'express';
 import { AuthenticationError } from 'apollo-server';
-import User, { UserModel } from '../models/User';
+import { UserModel } from '../models/User.type';
+import User from '../models/User';
 
 import { secret } from '../config';
 

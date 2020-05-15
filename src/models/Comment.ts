@@ -1,10 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { Comment } from '../controllers/comment';
-
-export interface CommentModel extends Document, Omit<Comment, 'user' | 'post'> {
-  user: Schema.Types.ObjectId;
-  post: Schema.Types.ObjectId;
-}
+import mongoose, { Schema } from 'mongoose';
+import { CommentModel } from './Comment.type';
 
 const commentSchema = new Schema<Comment>({
   content: {

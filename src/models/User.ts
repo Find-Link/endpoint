@@ -1,9 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { User } from '../controllers/user';
-
-export interface UserModel extends Document, Omit<User, 'comments'> {
-  comments: Schema.Types.ObjectId[];
-}
+import mongoose, { Schema } from 'mongoose';
+import { UserModel } from './User.type';
 
 const userSchema = new Schema<UserModel>({
   name: {

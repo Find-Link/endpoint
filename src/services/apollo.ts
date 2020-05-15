@@ -1,15 +1,9 @@
 import { gql } from 'apollo-server';
 import PostController from '../controllers/post';
+import { postDefs } from '../models/Post.type';
 
 const typeDefs = gql`
-  type Post {
-    title: String
-    description: String
-    sources: [String]
-    tags: [String]
-    comments: [ID]
-  }
-
+  ${postDefs}
   type Query {
     posts: [Post]
   }

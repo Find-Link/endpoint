@@ -1,9 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { Post } from '../controllers/post';
-
-export interface PostModel extends Document, Omit<Post, 'comments'> {
-  comments: Schema.Types.ObjectId[];
-}
+import mongoose, { Schema } from 'mongoose';
+import { PostModel } from './Post.type';
 
 const postSchema = new Schema<PostModel>({
   title: {
