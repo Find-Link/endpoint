@@ -1,15 +1,37 @@
 import { Schema, Document } from 'mongoose';
 import { gql } from 'apollo-server';
+import { sourceDefs } from './Source.type';
+
+const tagDefs = gql`
+  type Tag {
+    tag: String
+    slug: String
+  }
+`;
 
 const postDefs = gql`
+  ${tagDefs}
+  ${sourceDefs}
+
+  input AddPostInput {
+    title: String
+    thumbnail: Upload
+    description: String
+    listLinks: [ListLinkInput]
+    sources: [SourceInput]
+    tags: [String]
+    category: String;
+  }
+
   type Post {
     _id: ID
-    thumbnail: String
     title: String
+    thumbnail: String
     description: String
     listLinks: [ListLink]
-    sources: [String]
-    tags: [String]
+    sources: [Source]
+    tags: [Tag]
+    category: String;
     comments: [Comment]
   }
 `;
@@ -21,6 +43,7 @@ export interface Post {
   listLinks: string[];
   sources: string[];
   tags: string[];
+  category: string;
   comments: string[];
 }
 

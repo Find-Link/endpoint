@@ -42,7 +42,7 @@ const apollo = new ApolloServer({
   plugins: [responseCachePlugin()],
   context: ({ req }): object => {
     const { user } = req;
-    return { user: 'Yui Hatano' };
+    return { user };
   },
 });
 apollo.applyMiddleware({ app });

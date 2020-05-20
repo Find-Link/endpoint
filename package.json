@@ -23,6 +23,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
     "mongoose": "^5.9.14",
+    "mongoose-slug-updater": "^3.2.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "slugify": "^1.4.0",

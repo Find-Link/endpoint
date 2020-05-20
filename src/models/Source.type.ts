@@ -1,24 +1,24 @@
 import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 
-const linkDefs = gql`
-  input LinkInput {
+const sourceDefs = gql`
+  input SourceInput {
     text: String
     link: String
   }
 
-  type Link {
+  type Source {
     _id: ID
     text: String
     link: String
-    listLink: ListLink
+    posts: [Post]
   }
 `;
 
-export interface LinkModel extends Document {
+export interface SourceModel extends Document {
   text: string;
   link: string;
-  listLink: Schema.Types.ObjectId;
+  post: Schema.Types.ObjectId[];
 }
 
-export { linkDefs };
+export { sourceDefs };

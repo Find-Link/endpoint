@@ -2,6 +2,11 @@ import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 
 const listLinkDefs = gql`
+  input ListLinkInput {
+    title: String
+    links: [LinkInput]
+  }
+
   type ListLink {
     _id: ID
     title: String

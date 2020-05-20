@@ -1,22 +1,50 @@
 import mongoose, { Schema } from 'mongoose';
+// @ts-ignore
+import slug from 'mongoose-slug-updater';
+
 import { PostModel } from './Post.type';
+
+mongoose.plugin(slug);
+
+const tagSchema = new Schema({
+  tag: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  slug: {
+    type: String,
+    slug: 'tag',
+    unique: true,
+  },
+});
 
 const postSchema = new Schema<PostModel>({
   title: {
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    required: true,
+    slug: 'title',
+    unique: true,
+  },
   description: {
     type: String,
     required: true,
   },
+  listLinks: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ListLink',
+  }],
   sources: [{
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Source',
   }],
   tags: [{
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Tag',
   }],
   comments: [{
     type: Schema.Types.ObjectId,
@@ -25,7 +53,12 @@ const postSchema = new Schema<PostModel>({
 });
 
 postSchema.post('remove', (doc: PostModel) => {
+  const Source = mongoose.model('Source');
+  const Tag = mongoose.model('Tag');
   const Comment = mongoose.model('Comment');
+
+  Source.findByIdAndUpdate({ _id: { $in: doc.sources } }, { $pull: { posts: doc._id } }).exec();
+  Tag.findByIdAndUpdate({ _id: { $in: doc.tags } }, { $pull: { posts: doc._id } }).exec();
   Comment.remove({ _id: { $in: doc.comments } }).exec();
 });
 

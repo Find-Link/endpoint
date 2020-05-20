@@ -19,7 +19,8 @@ function authenticate(_target: Function, _propertyKey: string, descriptor: Prope
         return result;
       }
 
-      throw new AuthenticationError('You must be logged in');
+      // TODO: remove authentication for now, will enable in the future
+      // throw new AuthenticationError('You must be logged in');
     };
   }
   return descriptor;
