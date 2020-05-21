@@ -5,10 +5,12 @@ const sourceSchema = new Schema<SourceModel>({
   text: {
     type: String,
     required: true,
+    unique: true,
   },
   link: {
     type: String,
     required: true,
+    unique: true,
   },
   posts: [{
     type: Schema.Types.ObjectId,

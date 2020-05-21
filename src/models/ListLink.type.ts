@@ -18,10 +18,12 @@ const listLinkDefs = gql`
 export interface ListLink extends WithId {
   title: string;
   links: string[];
+  post: string;
 }
 
-export interface ListLinkModel extends Document, Omit<ListLink, '_id' | 'links'>{
+export interface ListLinkModel extends Document, Omit<ListLink, '_id' | 'links' | 'post'>{
   links: Schema.Types.ObjectId[];
+  post: Schema.Types.ObjectId;
 }
 
 export { listLinkDefs };

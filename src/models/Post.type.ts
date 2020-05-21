@@ -42,7 +42,10 @@ export interface Post extends WithId {
   comments: string[];
 }
 
-export interface PostModel extends Document, Omit<Post, '_id' | 'comments'> {
+export interface PostModel extends Document, Omit<Post, '_id' | 'listLinks' | 'sources' | 'tags' | 'comments'> {
+  listLinks: Schema.Types.ObjectId[];
+  sources: Schema.Types.ObjectId[];
+  tags: Schema.Types.ObjectId[];
   comments: Schema.Types.ObjectId[];
 }
 

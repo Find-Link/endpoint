@@ -5,10 +5,12 @@ const tagSchema = new Schema<TagModel>({
   text: {
     type: String,
     required: true,
+    unique: true,
   },
   slug: {
     type: String,
     required: true,
+    unique: true,
   },
   posts: [{
     type: Schema.Types.ObjectId,
