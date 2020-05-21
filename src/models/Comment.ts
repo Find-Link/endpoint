@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { CommentModel } from './Comment.type';
 
-const commentSchema = new Schema<Comment>({
+const commentSchema = new Schema<CommentModel>({
   content: {
     type: String,
     required: true,

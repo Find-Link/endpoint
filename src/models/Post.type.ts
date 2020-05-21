@@ -1,13 +1,8 @@
 import { Schema, Document } from 'mongoose';
 import { gql } from 'apollo-server';
 import { sourceDefs } from './Source.type';
-
-const tagDefs = gql`
-  type Tag {
-    tag: String
-    slug: String
-  }
-`;
+import { tagDefs } from './Tag.type';
+import { WithId } from '../services/utils';
 
 const postDefs = gql`
   ${tagDefs}
@@ -20,7 +15,7 @@ const postDefs = gql`
     listLinks: [ListLinkInput]
     sources: [SourceInput]
     tags: [String]
-    category: String;
+    category: String
   }
 
   type Post {
@@ -31,23 +26,23 @@ const postDefs = gql`
     listLinks: [ListLink]
     sources: [Source]
     tags: [Tag]
-    category: String;
+    category: String
     comments: [Comment]
   }
 `;
 
-export interface Post {
-  thumbnail: string;
+export interface Post extends WithId {
   title: string;
+  thumbnail: string;
   description: string;
   listLinks: string[];
   sources: string[];
   tags: string[];
-  category: string;
+  category: 'movie' | 'game' | 'application' |'manga';
   comments: string[];
 }
 
-export interface PostModel extends Document, Omit<Post, 'comments'> {
+export interface PostModel extends Document, Omit<Post, '_id' | 'comments'> {
   comments: Schema.Types.ObjectId[];
 }
 

@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:12-alpine
 WORKDIR /endpoint
 RUN apk update && apk add wget bash
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -P /endpoint/sh

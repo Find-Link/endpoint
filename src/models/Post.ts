@@ -30,6 +30,10 @@ const postSchema = new Schema<PostModel>({
     slug: 'title',
     unique: true,
   },
+  thumbnail: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,
@@ -46,6 +50,10 @@ const postSchema = new Schema<PostModel>({
     type: Schema.Types.ObjectId,
     ref: 'Tag',
   }],
+  category: {
+    type: String,
+    required: true,
+  },
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'Comment',

@@ -7,11 +7,14 @@ import helmet from 'helmet';
 import { ApolloServer } from 'apollo-server-express';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 import { RedisCache } from 'apollo-server-cache-redis';
+import bluebird from 'bluebird';
+import mongoose from 'mongoose';
 
 import jwtStrategy from './services/auth';
-import { port } from './config';
+import { port, mongoURL } from './config';
 import { typeDefs, resolvers } from './services/apollo';
 
+// Express
 const app = express();
 const server = new http.Server(app);
 
@@ -23,6 +26,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 jwtStrategy(passport);
 
+// Express
+
+// GraphQL
 app.use('/graphql', (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (_error, user) => {
     if (user) {
@@ -46,6 +52,23 @@ const apollo = new ApolloServer({
   },
 });
 apollo.applyMiddleware({ app });
+// GraphQL
+
+// MongoDB
+
+mongoose.Promise = bluebird;
+mongoose.connect(mongoURL, {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+});
+mongoose.connection.on('connected', () => {
+  console.log('Connected to database');
+});
+mongoose.connection.on('error', (error) => {
+  console.log(error);
+});
+
+// MongoDB
 
 server.listen(port, () => {
   console.log(`Server Started on port: ${port}`);

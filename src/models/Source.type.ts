@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
+import { WithId } from '../services/utils';
 
 const sourceDefs = gql`
   input SourceInput {
@@ -15,10 +16,16 @@ const sourceDefs = gql`
   }
 `;
 
-export interface SourceModel extends Document {
+export interface Source extends WithId {
   text: string;
   link: string;
-  post: Schema.Types.ObjectId[];
+  posts: string[];
+}
+
+export interface SourceModel extends Document, Omit<Source, '_id' | 'posts'> {
+  text: string;
+  link: string;
+  posts: Schema.Types.ObjectId[];
 }
 
 export { sourceDefs };
