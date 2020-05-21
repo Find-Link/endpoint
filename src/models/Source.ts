@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { SourceModel } from './Source.type';
+import { SourceSchema } from './Source.type';
 
-const sourceSchema = new Schema<SourceModel>({
+const sourceSchema = new Schema<SourceSchema>({
   text: {
     type: String,
     required: true,
@@ -18,5 +18,5 @@ const sourceSchema = new Schema<SourceModel>({
   }],
 });
 
-const source = mongoose.model<SourceModel>('Source', sourceSchema);
-export default source;
+const SourceModel = mongoose.model<SourceSchema>('Source', sourceSchema);
+export default SourceModel;

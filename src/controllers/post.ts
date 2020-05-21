@@ -3,9 +3,14 @@ import axios from 'axios';
 
 import { authenticate } from '../services/auth';
 import Post from '../models/Post';
-import { Post as PostSchema } from '../models/Post.type';
+import { Post } from '../models/Post.type';
 import { streamToBase64 } from '../services/utils';
 import { imgurClientId } from '../config';
+import ListLink from '../models/ListLink';
+
+interface Controller {
+  getPost(): IPost;
+}
 
 class PostController {
   static getPosts(parent: any, args: any, context: any): PostSchema[] {
@@ -28,15 +33,16 @@ class PostController {
         },
       })).data;
 
-      
-
-      const newPost = new Post({
+      const { _id } = await (new Post({
         title,
         thumbnail: link,
         description,
-      });
+        category,
+      })).save();
 
-      const test = await newPost.save();
+      listLinks.forEach(() => {
+
+      });
     } catch (e) {
       console.error(e.response);
       return e;

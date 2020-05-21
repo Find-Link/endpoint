@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 import { WithId } from '../services/utils';
+import { Post } from './Post.type';
 
 const tagDefs = gql`
   type Tag {
@@ -14,10 +15,10 @@ const tagDefs = gql`
 export interface Tag extends WithId {
   text: string;
   link: string;
-  posts: string[];
+  posts: Post[];
 }
 
-export interface TagModel extends Document, Omit<Tag, '_id' |'posts'> {
+export interface TagSchema extends Document, Omit<Tag, '_id' |'posts'> {
   posts: Schema.Types.ObjectId[];
 }
 

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { LinkModel } from './Link.type';
+import { LinkSchema } from './Link.type';
 
-const linkSchema = new Schema<LinkModel>({
+const linkSchema = new Schema<LinkSchema>({
   text: {
     type: String,
     required: true,
@@ -16,15 +16,15 @@ const linkSchema = new Schema<LinkModel>({
   },
 });
 
-linkSchema.post('save', (doc: LinkModel) => {
+linkSchema.post('save', (doc: LinkSchema) => {
   const ListLink = mongoose.model('ListLink');
   ListLink.findByIdAndUpdate(doc.listLink, { $push: { links: doc._id } }).exec();
 });
 
-linkSchema.post('remove', (doc: LinkModel) => {
+linkSchema.post('remove', (doc: LinkSchema) => {
   const ListLink = mongoose.model('ListLink');
   ListLink.findByIdAndUpdate(doc.listLink, { $pull: { links: doc._id } }).exec();
 });
 
-const listLink = mongoose.model<LinkModel>('Link', linkSchema);
-export default listLink;
+const LinkModel = mongoose.model<LinkSchema>('Link', linkSchema);
+export default LinkModel;

@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 // @ts-ignore
 import slug from 'mongoose-slug-updater';
 
-import { PostModel } from './Post.type';
+import { PostSchema } from './Post.type';
 
 mongoose.plugin(slug);
 
@@ -19,7 +19,7 @@ const tagSchema = new Schema({
   },
 });
 
-const postSchema = new Schema<PostModel>({
+const postSchema = new Schema<PostSchema>({
   title: {
     type: String,
     required: true,
@@ -60,7 +60,7 @@ const postSchema = new Schema<PostModel>({
   }],
 });
 
-postSchema.post('remove', (doc: PostModel) => {
+postSchema.post('remove', (doc: PostSchema) => {
   const Source = mongoose.model('Source');
   const Tag = mongoose.model('Tag');
   const Comment = mongoose.model('Comment');
@@ -70,5 +70,5 @@ postSchema.post('remove', (doc: PostModel) => {
   Comment.remove({ _id: { $in: doc.comments } }).exec();
 });
 
-const post = mongoose.model<PostModel>('Post', postSchema);
-export default post;
+const PostModel = mongoose.model<PostSchema>('Post', postSchema);
+export default PostModel;

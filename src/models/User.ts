@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { UserModel } from './User.type';
+import { UserSchema } from './User.type';
 
-const userSchema = new Schema<UserModel>({
+const userSchema = new Schema<UserSchema>({
   name: {
     type: String,
     required: true,
@@ -21,10 +21,10 @@ const userSchema = new Schema<UserModel>({
   }],
 });
 
-userSchema.post('remove', (doc: UserModel) => {
+userSchema.post('remove', (doc: UserSchema) => {
   const Comment = mongoose.model('Comment');
   Comment.remove({ _id: { $in: doc.comments } }).exec();
 });
 
-const user = mongoose.model<UserModel>('User', userSchema);
-export default user;
+const UserModel = mongoose.model<UserSchema>('User', userSchema);
+export default UserModel;

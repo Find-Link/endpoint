@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { TagModel } from './Tag.type';
+import { TagSchema } from './Tag.type';
 
-const tagSchema = new Schema<TagModel>({
+const tagSchema = new Schema<TagSchema>({
   text: {
     type: String,
     required: true,
@@ -18,5 +18,5 @@ const tagSchema = new Schema<TagModel>({
   }],
 });
 
-const tag = mongoose.model<TagModel>('Tag', tagSchema);
-export default tag;
+const TagModel = mongoose.model<TagSchema>('Tag', tagSchema);
+export default TagModel;

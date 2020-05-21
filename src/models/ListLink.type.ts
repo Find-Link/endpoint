@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 import { WithId } from '../services/utils';
+import { Post } from './Post.type';
+import { Link } from './Link.type';
 
 const listLinkDefs = gql`
   input ListLinkInput {
@@ -17,11 +19,11 @@ const listLinkDefs = gql`
 
 export interface ListLink extends WithId {
   title: string;
-  links: string[];
-  post: string;
+  links: Link[];
+  post: Post;
 }
 
-export interface ListLinkModel extends Document, Omit<ListLink, '_id' | 'links' | 'post'>{
+export interface ListLinkSchema extends Document, Omit<ListLink, '_id' | 'links' | 'post'>{
   links: Schema.Types.ObjectId[];
   post: Schema.Types.ObjectId;
 }

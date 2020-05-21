@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { CommentModel } from './Comment.type';
+import { CommentSchema } from './Comment.type';
 
-const commentSchema = new Schema<CommentModel>({
+const commentSchema = new Schema<CommentSchema>({
   content: {
     type: String,
     required: true,
@@ -18,15 +18,15 @@ const commentSchema = new Schema<CommentModel>({
   },
 });
 
-commentSchema.post('save', (doc: CommentModel) => {
+commentSchema.post('save', (doc: CommentSchema) => {
   const User = mongoose.model('User');
   User.findByIdAndUpdate(doc.user, { $push: { comment: doc._id } }).exec();
 });
 
-commentSchema.post('remove', (doc: CommentModel) => {
+commentSchema.post('remove', (doc: CommentSchema) => {
   const User = mongoose.model('User');
   User.findByIdAndUpdate(doc.user, { $pull: { comment: doc._id } }).exec();
 });
 
-const comment = mongoose.model<CommentModel>('Comment', commentSchema);
-export default comment;
+const CommentModel = mongoose.model<CommentSchema>('Comment', commentSchema);
+export default CommentModel;

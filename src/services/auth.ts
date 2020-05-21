@@ -2,7 +2,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStatic } from 'passport';
 import { Request } from 'express';
 import { AuthenticationError } from 'apollo-server';
-import { UserModel } from '../models/User.type';
+import { UserSchema } from '../models/User.type';
 import User from '../models/User';
 
 import { secret } from '../config';
@@ -31,7 +31,7 @@ export default (passport: PassportStatic): void => {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secret,
     passReqToCallback: true,
-  }, (req: Request, payload: UserModel, done: (err: Error | null, user: any) => void) => {
+  }, (req: Request, payload: UserSchema, done: (err: Error | null, user: any) => void) => {
     User.findById(payload._id, (err, user) => {
       if (err) {
         return done(err, false);

@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 import { WithId } from '../services/utils';
+import { Comment } from './Comment.type';
 
 const userDefs = gql`
   type User {
@@ -15,10 +16,10 @@ export interface User extends WithId {
   name: string;
   email: string;
   password: string;
-  comments: string[];
+  comments: Comment[];
 }
 
-export interface UserModel extends Document, Omit<User, '_id' | 'comments'> {
+export interface UserSchema extends Document, Omit<User, '_id' | 'comments'> {
   comments: Schema.Types.ObjectId[];
 }
 
