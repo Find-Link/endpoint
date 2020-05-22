@@ -40,7 +40,14 @@ const postDefs = gql`
 
 const postResolvers = {
   Query: {
-    posts: PostController.getPosts,
+    posts: PostController.posts,
+  },
+
+  Post: {
+    listLinks: PostController.listLinks,
+    sources: PostController.sources,
+    tags: PostController.tags,
+    comments: PostController.comments,
   },
 
   Mutation: {
