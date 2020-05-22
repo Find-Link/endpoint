@@ -18,5 +18,14 @@ const sourceSchema = new Schema<SourceSchema>({
   }],
 });
 
+sourceSchema.post('remove', (doc: SourceSchema) => {
+  const Post = mongoose.model('Post');
+  Post.findByIdAndUpdate({
+    _id: {
+      $in: doc.posts,
+    },
+  }, { $pull: { sources: doc._id } }).exec();
+});
+
 const SourceModel = mongoose.model<SourceSchema>('Source', sourceSchema);
 export default SourceModel;

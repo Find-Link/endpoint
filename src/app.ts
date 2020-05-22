@@ -57,13 +57,17 @@ apollo.applyMiddleware({ app });
 // MongoDB
 
 mongoose.Promise = bluebird;
+
 mongoose.connect(mongoURL, {
   useCreateIndex: true,
   useNewUrlParser: true,
+  useFindAndModify: false,
 });
+
 mongoose.connection.on('connected', () => {
   console.log('Connected to database');
 });
+
 mongoose.connection.on('error', (error) => {
   console.log(error);
 });

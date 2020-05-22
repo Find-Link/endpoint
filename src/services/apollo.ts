@@ -27,6 +27,26 @@ const resolvers = {
     posts: PostController.getPosts,
   },
 
+  ListLink: {
+    listLinks: PostController.getListLinks,
+  },
+
+  Source: {
+    books(parent) {
+      // Filter the hardcoded array of books to only include
+      // books that are located at the correct branch
+      return books.filter((book) => book.branch === parent.branch);
+    },
+  },
+
+  Comment: {
+    books(parent) {
+      // Filter the hardcoded array of books to only include
+      // books that are located at the correct branch
+      return books.filter((book) => book.branch === parent.branch);
+    },
+  },
+
   Mutation: {
     addPost: PostController.addPost,
   },

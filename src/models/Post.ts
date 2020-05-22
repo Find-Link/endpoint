@@ -6,19 +6,6 @@ import { PostSchema } from './Post.type';
 
 mongoose.plugin(slug);
 
-const tagSchema = new Schema({
-  tag: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  slug: {
-    type: String,
-    slug: 'tag',
-    unique: true,
-  },
-});
-
 const postSchema = new Schema<PostSchema>({
   title: {
     type: String,
@@ -26,7 +13,6 @@ const postSchema = new Schema<PostSchema>({
   },
   slug: {
     type: String,
-    required: true,
     slug: 'title',
     unique: true,
   },
@@ -61,10 +47,12 @@ const postSchema = new Schema<PostSchema>({
 });
 
 postSchema.post('remove', (doc: PostSchema) => {
+  const ListLink = mongoose.model('ListLink');
   const Source = mongoose.model('Source');
   const Tag = mongoose.model('Tag');
   const Comment = mongoose.model('Comment');
 
+  ListLink.remove({ _id: { $in: doc.listLinks } }).exec();
   Source.findByIdAndUpdate({ _id: { $in: doc.sources } }, { $pull: { posts: doc._id } }).exec();
   Tag.findByIdAndUpdate({ _id: { $in: doc.tags } }, { $pull: { posts: doc._id } }).exec();
   Comment.remove({ _id: { $in: doc.comments } }).exec();

@@ -23,7 +23,10 @@ listLinkSchema.post('save', (doc: ListLinkSchema) => {
 
 listLinkSchema.post('remove', (doc: ListLinkSchema) => {
   const Link = mongoose.model('Link');
+  const Post = mongoose.model('Post');
+
   Link.remove({ _id: { $in: doc.links } }).exec();
+  Post.findByIdAndUpdate(doc.post, { $pull: { listLinks: doc._id } }).exec();
 });
 
 const ListLinkModel = mongoose.model<ListLinkSchema>('ListLink', listLinkSchema);
