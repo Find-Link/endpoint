@@ -3,6 +3,7 @@ import { Schema, Document } from 'mongoose';
 import { WithId } from '../services/utils';
 import { Post } from './Post.type';
 import { Link } from './Link.type';
+import ListLinkController from '../controllers/listLink';
 
 const listLinkDefs = gql`
   input ListLinkInput {
@@ -17,6 +18,12 @@ const listLinkDefs = gql`
   }
 `;
 
+const listLinkResolvers = {
+  ListLink: {
+    links: ListLinkController.links,
+  },
+};
+
 export interface ListLink extends WithId {
   title: string;
   links: Link[];
@@ -28,4 +35,4 @@ export interface ListLinkSchema extends Document, Omit<ListLink, '_id' | 'links'
   post: Schema.Types.ObjectId;
 }
 
-export { listLinkDefs };
+export { listLinkDefs, listLinkResolvers };

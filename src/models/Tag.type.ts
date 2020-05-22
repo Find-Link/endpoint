@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 import { WithId } from '../services/utils';
 import { Post } from './Post.type';
+import TagController from '../controllers/tag';
 
 const tagDefs = gql`
   type Tag {
@@ -11,6 +12,12 @@ const tagDefs = gql`
     posts: [Post]
   }
 `;
+
+const tagResolvers = {
+  Tag: {
+    posts: TagController.posts,
+  },
+};
 
 export interface Tag extends WithId {
   text: string;
@@ -22,4 +29,4 @@ export interface TagSchema extends Document, Omit<Tag, '_id' |'posts'> {
   posts: Schema.Types.ObjectId[];
 }
 
-export { tagDefs };
+export { tagDefs, tagResolvers };

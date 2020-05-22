@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 import { Schema, Document } from 'mongoose';
 import { WithId } from '../services/utils';
 import { Comment } from './Comment.type';
+import UserController from '../controllers/user';
 
 const userDefs = gql`
   type User {
@@ -11,6 +12,12 @@ const userDefs = gql`
     comments: [Comment]
   }
 `;
+
+const userResolvers = {
+  User: {
+    comments: UserController.comments,
+  },
+};
 
 export interface User extends WithId {
   name: string;
@@ -23,4 +30,4 @@ export interface UserSchema extends Document, Omit<User, '_id' | 'comments'> {
   comments: Schema.Types.ObjectId[];
 }
 
-export { userDefs };
+export { userDefs, userResolvers };
