@@ -20,7 +20,7 @@ const sourceSchema = new Schema<SourceSchema>({
 
 sourceSchema.post('remove', (doc: SourceSchema) => {
   const Post = mongoose.model('Post');
-  Post.findByIdAndUpdate({
+  Post.updateMany({
     _id: {
       $in: doc.posts,
     },

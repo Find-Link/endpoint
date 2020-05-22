@@ -35,20 +35,20 @@ class PostController {
         },
       })).data;
 
-      const postDoc = await (new PostModel({
+      const postModel = new PostModel({
         title,
         thumbnail: thumbnailLink,
         description,
         category,
-      })).save();
+      });
 
-      await Promise.all(listLinks.map(async ({ title: listLinkTitle, links }) => {
+      const postDoc = await postModel.save();
+
+      const listLinkDocs = await Promise.all(listLinks.map(async ({ title: listLinkTitle, links }) => {
         const listLinkDoc = await (new ListLinkModel({
           title: listLinkTitle,
           post: postDoc._id,
         })).save();
-
-        console.log(links);
 
         await Promise.all(links.map(async ({ text, link }) => (new LinkModel({
           text,
@@ -59,7 +59,7 @@ class PostController {
         return listLinkDoc;
       }));
 
-      await Promise.all(sources.map(async ({ text, link }) => {
+      const sourceDocs = await Promise.all(sources.map(async ({ text, link }) => {
         const source = await SourceModel.findOneAndUpdate(
           { text, link },
           {
@@ -72,7 +72,7 @@ class PostController {
         return source;
       }));
 
-      await Promise.all(tags.map(async (text) => {
+      const tagDocs = await Promise.all(tags.map(async (text) => {
         const tag = await TagModel.findOneAndUpdate(
           { text },
           {
@@ -85,9 +85,12 @@ class PostController {
         return tag;
       }));
 
-      const post = (await PostModel.findById(postDoc._id).exec())!;
+      postModel.listLinks = listLinkDocs.map(({ _id }) => _id);
+      postModel.sources = sourceDocs.map(({ _id }) => _id);
+      postModel.tags = tagDocs.map(({ _id }) => _id);
+      await postModel.save();
 
-      return post;
+      return postDoc;
     } catch (e) {
       console.error(e);
       return e;

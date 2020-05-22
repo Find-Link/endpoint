@@ -25,7 +25,7 @@ const tagSchema = new Schema<TagSchema>({
 
 tagSchema.post('remove', (doc: TagSchema) => {
   const Post = mongoose.model('Post');
-  Post.findByIdAndUpdate({
+  Post.updateMany({
     _id: {
       $in: doc.posts,
     },

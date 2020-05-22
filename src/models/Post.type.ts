@@ -1,14 +1,12 @@
 import { Schema, Document } from 'mongoose';
 import { gql } from 'apollo-server';
-import { sourceDefs, Source } from './Source.type';
-import { tagDefs, Tag } from './Tag.type';
+import { Source } from './Source.type';
+import { Tag } from './Tag.type';
 import { WithId } from '../services/utils';
 import { ListLink } from './ListLink.type';
+import PostController from '../controllers/post';
 
 const postDefs = gql`
-  ${tagDefs}
-  ${sourceDefs}
-
   input AddPostInput {
     title: String
     thumbnail: Upload
@@ -30,7 +28,25 @@ const postDefs = gql`
     category: String
     comments: [Comment]
   }
+
+  type Query {
+    posts: [Post]
+  }
+
+  type Mutation {
+    addPost(newPost: AddPostInput): Post
+  }
 `;
+
+const postResolvers = {
+  Query: {
+    posts: PostController.getPosts,
+  },
+
+  Mutation: {
+    addPost: PostController.addPost,
+  },
+};
 
 export interface Post extends WithId {
   title: string;
@@ -50,4 +66,4 @@ export interface PostSchema extends Document, Omit<Post, '_id' | 'listLinks' | '
   comments: Schema.Types.ObjectId[];
 }
 
-export { postDefs };
+export { postDefs, postResolvers };
